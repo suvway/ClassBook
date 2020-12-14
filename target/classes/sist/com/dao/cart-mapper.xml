@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sist.com.app.dto.ProductBean">
+	<select id="adminLoginIdCheck" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT PASSWORD FROM ADMINLOGIN
+		WHERE ID=#{VALUE}
+	</select>
+	<sql id="product">
+		SELECT
+		id,PK,productName,productPrice,productOrigin,productCategory,fileName,
+		TO_CHAR(regdate,'YYYY/MM/DD')REGDATE FROM ADMINPRODUCT
+	</sql>
+
+	<select id="selectProduct" parameterType="java.util.HashMap"
+		resultType="product">
+		<include refid="product"></include>
+		<where>
+			ID=#{id}
+		</where>
+	</select>
+
+	<insert id="insertProductAdmin" parameterType="product">
+		INSERT INTO
+		ADMINPRODUCT VALUES(#{id},ADMINPRODUCT_SEQ.NEXTVAL,
+		#{productName},#{productPrice},#{productOrigin},#{productCategory},#{fileName},SYSDATE)
+	</insert>
+	<delete id="adminProDelete" parameterType="product">
+		DELETE FROM
+		ADMINPRODUCT WHERE ID=#{id} AND PK=#{pk}
+	</delete>
+	<select id="adminSelectInfo" parameterType="java.lang.Integer"
+		resultType="product">
+		<include refid="product"></include>
+		WHERE PK=#{VALUE}
+	</select>
+	<update id="modifyProductAdmin" parameterType="product">
+		UPDATE
+		ADMINPRODUCT SET
+		PRODUCTNAME=#{productName},PRODUCTPRICE=#{productPrice},
+		PRODUCTORIGIN=#{productOrigin},PRODUCTCATEGORY=#{productCategory},FILENAME=#{fileName}
+		WHERE PK=#{pk} AND ID=#{id}
+	</update>
+	<select id="clientSelect" resultType="product">
+		SELECT NO,A.ID,A.NAME SELLER, PK, PRODUCTNAME, PRODUCTPRICE, PRODUCTORIGIN,
+		PRODUCTCATEGORY, FILENAME, REGDATE
+		FROM ADMINLOGIN A, ADMINPRODUCT B
+		WHERE A.ID=B.ID
+	</select>
+	<select id="clientInfoAction" resultType="product" parameterType="java.lang.Integer">
+		SELECT NO,A.ID,A.NAME SELLER, PK, PRODUCTNAME, PRODUCTPRICE, PRODUCTORIGIN,
+		PRODUCTCATEGORY, FILENAME, REGDATE
+		FROM ADMINLOGIN A, ADMINPRODUCT B
+		WHERE A.ID=B.ID AND PK=#{pk}
+	</select>
+	<insert id="testReplyInsert" parameterType="sist.com.app.dto.ReplyBean">
+      INSERT INTO REPLYVIEW(NO,ID,CONTENTS,REGDATE) 
+      VALUES(REPLYVIEW_SEQ.NEXTVAL,#{id},#{contents},sysdate)
+   </insert>
+   <select id="testReplySelect" resultType="sist.com.app.dto.ReplyBean">
+   	  SELECT NO,ID,CONTENTS,REGDATE FROM REPLYVIEW
+   
+   </select>
+   <insert id="insertReplyView" parameterType="sist.com.app.dto.ReplyBean">
+     INSERT INTO REPLYVIEW(NO,CONTENTS,ID,IMG,REGDATE,INFOPK)
+      VALUES(REPLYVIEW_SEQ.NEXTVAL,#{contents},#{id},#{img},SYSDATE,#{infopk})
+   </insert>
+   <select id="infoReplySelect" resultType="sist.com.app.dto.ReplyBean" parameterType="java.lang.Integer">
+     SELECT NO,CONTENTS,ID,REGDATE,IMG,INFOPK
+     FROM REPLYVIEW
+     WHERE INFOPK=#{VALUE}   
+   </select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

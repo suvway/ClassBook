@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+<bean id="person1" class="sist.com.di.basic.Person" scope="prototype"><!-- geta seta를 이용해서 주입 -->
+	<property name="age" value="25"></property>
+	<property name="name" value="java"></property>
+	<property name="addr" value="서울시"></property>
+</bean>	
+<bean id="person2" class="sist.com.di.basic.Person" scope="singleton" p:name="oracle" p:age="30" p:addr="대구시">
+<!-- p태그를 이용해서 주입(namespace에서 p를 선택해서 넣어준상태) -->
+</bean>
+
+<bean id="book1" class="sist.com.di.basic.Book" scope="singleton"><!-- 생성자로 인잭션 생성자 인자 갯수를 맞춰줘야한다. -->
+	<constructor-arg name="author" value="김상배"></constructor-arg>
+	<constructor-arg name="title" value="스프링의 정석"></constructor-arg>
+	<constructor-arg name="price" value="35000"></constructor-arg>
+	<constructor-arg name="publisher" value="쌍용출판사"></constructor-arg>
+	<constructor-arg name="isbn" value="1234"></constructor-arg>
+</bean>
+
+<bean id="book2" class="sist.com.di.basic.Book" scope="prototype"><!-- seta를 이용할 땐 인자 겟수가 안맞아도 된다. -->
+	<property name="author" value="주병찬"></property>
+	<property name="title" value="오라클의 정석"></property>
+	<property name="price" value="45000"></property>
+	<property name="publisher" value="정보출판사"></property>
+	<property name="isbn" value="5678"></property>
+</bean>
+
+<bean id="book3" class="sist.com.di.basic.Book" scope="singleton"><!-- seta를 이용할 땐 인자 겟수가 안맞아도 된다. -->
+	<property name="author" value="변진환"></property>
+	<property name="title" value="부트스트랩의 정석"></property>
+	<property name="price" value="15000"></property>
+	<property name="publisher" value="통신출판사"></property>
+	<property name="isbn" value="9012"></property>
+</bean>
+<bean id="book4" class="sist.com.di.basic.Book" scope="singleton" p:author="박재은" p:title="이클립스의 정석"
+p:price="5000" p:publisher="신통출판사" p:isbn="3456"></bean>
+
+<bean id="store1" class="sist.com.di.basic.Store">
+	<property name="list">
+		<list>
+			<ref bean="book1"/>
+			<ref bean="book2"/>
+			<ref bean="book3"/>
+			<ref bean="book4"/>
+		</list>
+	</property>
+	<property name="set">
+		<list>
+			<ref bean="book1"/>
+			<ref bean="book2"/>
+			<ref bean="book3"/>
+			<ref bean="book4"/>
+		</list>
+	</property>
+	<property name="map">
+		<map>
+			<entry>
+				<key><value>1</value></key>
+				<ref bean="book1"/>
+			</entry>
+			<entry>
+				<key><value>2</value></key>
+				<ref bean="book2"/>
+			</entry>
+			<entry>
+				<key><value>3</value></key>
+				<ref bean="book3"/>
+			</entry>
+			<entry>
+				<key><value>4</value></key>
+				<ref bean="book4"/>
+			</entry>
+		</map>
+	</property>
+	<property name="properties">
+		<props>
+			<prop key="211.63.89.99">Java</prop>
+			<prop key="211.63.89.100">Oracle</prop>
+			<prop key="211.63.89.101">Html</prop>
+		</props>
+	</property>
+</bean>
+</beans>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+<bean id="mydao" class="sist.com.aop.basic1.MyBatisDao" scope="singleton"></bean>
+<bean id="idao" class="sist.com.aop.basic1.IBatisDao" scope="singleton"></bean>
+<bean id="beforeAdvice" class="sist.com.aop.basic1.BeforeAdvice"></bean>		
+<bean id="afterAdvice" class="sist.com.aop.basic1.AfterAdvice"></bean>
+
+<aop:config>
+   <aop:aspect id="aopbefore" ref="beforeAdvice">
+     <aop:before method="beforeCheck"  pointcut="execution(* sist.com.aop.basic1.Dao*.*(*,*,..))"/>   
+   </aop:aspect>
+   <aop:aspect id="aopafter" ref="afterAdvice">
+     <aop:after-returning method="afterCheck"  pointcut="execution(* sist.com.aop.basic1.Dao*.*(*,*,..))"/>   
+   </aop:aspect>
+</aop:config>		
+
+
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

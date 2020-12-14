@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sist.com.app.dtp.MvcTestNameSpace">
+
+	<insert id="insertUpdate1"
+		parameterType="sist.com.app.dto.MvcTransactionBean">
+		INSERT INTO MVCTRANSACTION VALUES(MVCTRANSACTION_SEQ.NEXTVAL,#{msg},#{cnt})
+	</insert>
+
+	<update id="insertUpdate2"
+		parameterType="sist.com.app.dto.MvcTransactionBean">
+		UPDATE MVCTRANSACTION SET CNT=500 WHERE MSG=#{msg}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

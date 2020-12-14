@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration><!-- DB설정(Connection) -->
+   
+    <typeAliases>   
+      <typeAlias type="sist.com.app.dto.SpringMember" alias="member"/>   <!-- bean의 경로 -->
+      <typeAlias type="sist.com.app.dto.BootBoardBean" alias="boot"/>   <!-- bean의 경로 -->
+      <typeAlias type="sist.com.app.dto.AdminProductBean" alias="product"/>   <!-- bean의 경로 -->
+    </typeAliases> 
+    
+    <mappers>
+       <mapper resource="sist/com/dao/board-mapper.xml"/> 
+       <mapper resource="sist/com/dao/cart-mapper.xml"/>
+       <mapper resource="sist/com/dao/mvctest-mapper.xml"/>
+    </mappers>
+</configuration>
+
+
+
+
+
+

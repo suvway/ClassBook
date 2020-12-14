@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<boards>
+	<board>
+		<no>1</no>
+		<title>Java</title>
+	</board>
+	<board>
+		<no>2</no>
+		<title>Oracle</title>
+	</board>
+	<board>
+		<no>3</no>
+		<title>Spring</title>
+	</board>
+</boards>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 대상체에 바로 접근하는 게 아니라 proxy객체를 생성해서 타겟(마린)을 바라보는 관점을 생성하고  value값에 공통단 부분을 나열한 후 타겟의 관점에 따라 명령을 수행하는 게 핵심이다   -->
+
+	<bean id="commandAttack" class="sist.com.aop.basic2.CommandAttack">	</bean>
+	<bean id="commandMove" class="sist.com.aop.basic2.CommandAttack">	</bean>
+	<bean id="medicAdvice" class="sist.com.aop.basic2.Medic"></bean>
+	<bean id="mapBefore" class="sist.com.aop.basic2.MapBeforeProcess"></bean>		<!-- 공통단 코드, 핵심코드가 불려지기 이전/이후에 불려진다.  -->
+
+	<bean id="marine" class="sist.com.aop.basic2.Marine">
+		<property name="command" ref="commandAttack"></property>
+	</bean>
+	
+	<!-- proxy 가 org.springF(제조사에서 만든) -->
+	<bean id="marineProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target" ref="marine"></property>		<!-- marine객체를 대신해서 프록시 객체를 만드는 것  -->
+		<property name="interceptorNames">
+			<list>
+				<value>mapBefore</value>
+				<value>medicAdvice</value> 
+			</list>
+		</property>	
+	</bean>
+	
+	
+</beans>
+
+
+

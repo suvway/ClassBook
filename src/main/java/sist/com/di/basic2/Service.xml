@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="jdbcDao" class="sist.com.di.basic2.JdbcDao"/>
+	<bean id="IBatisDao" class="sist.com.di.basic2.IBatisDao"/>
+	<bean id="MyBatisDao" class="sist.com.di.basic2.MyBatisDao"/>
+	
+	<bean id="service1" class="sist.com.di.basic2.ServiceImp" scope="prototype">
+		<property name="dao" ref="jdbcDao"></property>
+	</bean>
+	<bean id="service2" class="sist.com.di.basic2.ServiceImp" scope="prototype">
+		<property name="dao" ref="IBatisDao"></property>
+	</bean>
+	<bean id="service3" class="sist.com.di.basic2.ServiceImp" scope="prototype">
+		<property name="dao" ref="MyBatisDao"></property>
+	</bean>
+	
+	<bean id="service4" class="sist.com.di.basic2.AdminServiceImp">
+		<property name="dao" ref="jdbcDao"></property>
+	</bean>
+	<bean id="service5" class="sist.com.di.basic2.AdminServiceImp">
+		<property name="dao" ref="IBatisDao"></property>
+	</bean>
+	<bean id="service6" class="sist.com.di.basic2.AdminServiceImp">
+		<property name="dao" ref="MyBatisDao"></property>
+	</bean>
+</beans>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<mvc:annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<!-- DBsetting  -->
+	<beans:bean id="ds" class="org.apache.commons.dbcp.BasicDataSource"><!-- db정보 -->
+		<beans:property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" ></beans:property>
+		<beans:property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"></beans:property>
+		<beans:property name="username" value="APPLE"></beans:property>
+		<beans:property name="password" value="1234"></beans:property>
+	</beans:bean>
+	
+	<beans:bean id="logds" class="net.sf.log4jdbc.Log4jdbcProxyDataSource"> <!-- 로그 띄우는 부분 maven 라이브러리에 있다. -->
+		<beans:constructor-arg ref="ds"></beans:constructor-arg><!-- with constructor-arg, injecting database source -->
+		<beans:property name="logFormatter">
+			<beans:bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter"><!-- formatter를 바꿀 수 있는 툴 -->
+				<beans:property name="loggingType" value="MULTI_LINE"></beans:property><!-- 여러줄로 나오게 하는 옵션 -->
+				<beans:property name="sqlPrefix" value="SQL : "></beans:property><!-- 접두사 설정 -->
+			</beans:bean>
+		</beans:property>
+	</beans:bean>
+	
+	<beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" p:dataSource-ref="logds"></beans:bean><!-- object for rollback or commit  -->
+	<tx:annotation-driven transaction-manager="transactionManager"/><!-- tx를 통해 transaction-manager지정 -->
+	<!-- tx란 transaction에 관점을 설정해줄 수 있는 마크업 -->
+	
+	<beans:bean id="ssf" class="org.mybatis.spring.SqlSessionFactoryBean"><!-- mybatis객체 -->
+		<beans:property name="dataSource" ref="logds"></beans:property>
+		<beans:property name="configLocation" value="WEB-INF/Config.xml"></beans:property>
+	</beans:bean>
+	
+	<beans:bean id="springMemberDao" class="sist.com.dao.SpringBoardDao"><!-- data를 주입받은 mybatis객체를 factory(dao)에 주입해주는 부분 -->
+		<beans:property name="sqlSessionFactory" ref="ssf"></beans:property>
+	</beans:bean>
+	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes><!-- transactionManager가 불리는 시점을 설정한다고 생각하면 된다 aop관점에서 -->
+			<tx:method name="*" propagation="REQUIRED"/><!-- method가 불릴 때 transaction매니저가 불린다고 생각 -->
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config><!-- aop에서 config를 설정해주는 과정 -->
+		<aop:advisor advice-ref="txAdvice" pointcut="execution(* sist.com.dao.*.*(..))"/><!-- advisor==aspect // advisor(what+when+where)안에 advice가 있다. advice==what+when pointcut=where -->
+	</aop:config>
+	
+	<!-- upload setting -->
+	<beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<beans:property name="order" value="0"/>
+	</beans:bean>
+	<beans:bean name="download" class="sist.com.app.dto.DownloadView"></beans:bean>
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/" />
+		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="1"/>
+	</beans:bean>
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="defaultEncoding" value="UTF-8"></beans:property>
+		<beans:property name="maxUploadSize" value="3000000"></beans:property>
+	</beans:bean>
+	
+	<!-- intercepter -->
+	<beans:bean id="intercepter" class="sist.com.app.dto.IntercepterPro"/>
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/loginPro.do"/>
+			<beans:ref bean="intercepter"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	
+	<!-- component scan -->
+	<context:component-scan base-package="sist.com.web" />
+	<context:component-scan base-package="sist.com.bbs" />
+	<context:component-scan base-package="sist.com.dao" />
+	<context:component-scan base-package="sist.com.service" />
+	<context:component-scan base-package="sist.com.controller" />
+	<!-- controller and component both need to write here -->
+	
+	
+	
+</beans:beans>

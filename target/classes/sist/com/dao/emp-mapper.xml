@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sist.com.dto.EmpBean">
+          
+          
+          
+    <select id="selectSqlEmpCheckBox"  resultType="emp" parameterType="java.util.HashMap">
+    SELECT  empno,ename,job,NVL(mgr,0)mgr,to_char(hiredate,'yyyy/mm/dd')hiredate, 
+    sal,nvl(comm,0)comm,deptno
+    FROM EMP
+   <!--  WHERE EMPNO IN (7469,7499,7656,7687) -->
+   
+   <where>
+     <if test="empno!=null">
+      EMPNO IN
+      <foreach collection="empno" index="index" item="ep" open="("  close=")" separator=",">
+        #{ep}
+      
+      </foreach>
+     
+     </if>
+   </where>
+   
+    </select>     
+  
+   <select id="selectSqlEmp" resultType="emp" parameterType="java.util.HashMap">
+    SELECT  empno,ename,job,NVL(mgr,0)mgr,to_char(hiredate,'yyyy/mm/dd')hiredate, 
+    sal,nvl(comm,0)comm,deptno
+    FROM EMP
+   <!--  <where> 
+    <if test="sal!=0">
+    
+     </if> 
+    </where>  -->
+    <!--  <where>
+    <choose>
+      <when test="job!='KING' and job=='MANAGER'">
+          <![CDATA[
+           SAL BETWEEN 1000 AND 2000     
+          ]]>
+      </when>
+      <when test="job!='KING' and job=='SALESMAN'">
+          <![CDATA[
+           SAL BETWEEN 3000 AND 5000     
+          ]]>
+      </when>
+      <otherwise>
+      <![CDATA[
+          SAL <1000 
+      ]]>
+      </otherwise>
+    </choose>
+    </where>  -->
+   </select>
+   
+   <update id="updateEmpAction" parameterType="emp">
+   	UPDATE EMPCP 
+   	<trim prefix="SET" suffixOverrides="," prefixOverrides=",">
+   	
+   	<if test="job!=null">
+   	JOB=#{job}
+   	</if>
+   	,
+   	<if test="sal!=0">
+   	SAL=#{sal}
+   	</if>
+   	</trim>
+   	WHERE EMPNO=#{empno}
+   </update>
+ 
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

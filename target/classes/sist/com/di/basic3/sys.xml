@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+<context:annotation-config/><!-- annotation이 작동하게 한다. annotation을 따르지 않으면 에러가 난다. -->
+<bean id="computer1" class="sist.com.di.basic3.Computer" p:cpu="amd" p:maker="리사수" p:price="5000">
+	<qualifier value="c1"></qualifier>
+</bean>
+<bean id="computer2" class="sist.com.di.basic3.Computer" p:cpu="zeon" p:maker="intel" p:price="5000">
+	<qualifier value="c2"></qualifier>
+</bean>
+
+<bean id="sysactor" class="sist.com.di.basic3.SystemActor">
+	
+</bean>
+</beans>
